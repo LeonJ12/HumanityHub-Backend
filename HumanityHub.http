@@ -1,0 +1,19 @@
+@HumanityHub_HostAddress = http://localhost:5103
+
+GET {{HumanityHub_HostAddress}}/api/campaign
+Accept: application/json
+
+###
+PUT {{HumanityHub_HostAddress}}/api/campaign/2
+Content-Type: application/json
+
+{
+    "title": "Novi naziv",
+    "description": "Novi opis",
+    "goalAmount": 6000,
+    "isActive": true
+}
+
+###
+GET {{HumanityHub_HostAddress}}/api/donation
+Accept: application/json
