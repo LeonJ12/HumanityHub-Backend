@@ -1,7 +1,8 @@
-﻿using HumanityHub.Data;
+﻿using HumanityHub.AppExceptions;
+using HumanityHub.Data;
 using HumanityHub.DTOs;
-using HumanityHub.Services.Interfaces;
 using HumanityHub.Models;
+using HumanityHub.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace HumanityHub.Services
@@ -19,7 +20,7 @@ namespace HumanityHub.Services
             {
                 Title = createDto.Title,
                 Description = createDto.Description,
-                GoalAmount = createDto.GoalAmount
+                GoalAmount = createDto.GoalAmount <= 0 ? throw new BadRequestException("Goal amount must be greater than zero.") : createDto.GoalAmount,
             };
             _db.Campaigns.Add(newCampaign);
             await _db.SaveChangesAsync();
@@ -72,10 +73,12 @@ namespace HumanityHub.Services
             var campaign = await _db.Campaigns.FindAsync(id);
             if (campaign == null) return false;
             if (!campaign.IsActive)
-                throw new InvalidOperationException("Cannot update inactive campaign.");
+                throw new ConflictException("Cannot update inactive campaign.");
             campaign.Title = updateDto.Title;
             campaign.Description = updateDto.Description;
-            campaign.GoalAmount = updateDto.GoalAmount;
+            if (campaign.CurrentAmount > campaign.GoalAmount)
+                throw new BadRequestException("Current amount cannot exceed goal amount.");
+            campaign.GoalAmount = updateDto.GoalAmount <= 0 ? throw new BadRequestException("Goal amount must be greater than zero.") : updateDto.GoalAmount;
             campaign.IsActive = updateDto.IsActive;
             await _db.SaveChangesAsync();
             return true;

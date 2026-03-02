@@ -4,6 +4,7 @@ using HumanityHub.Services.Interfaces;
 using HumanityHub.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using HumanityHub.AppExceptions;
 namespace HumanityHub.Services
 {
     public class DonationService : IDonationService
@@ -16,9 +17,9 @@ namespace HumanityHub.Services
         public async Task<DonationResponseDto> CreateDonationAsync(CreateDonationDto createDonationDto)
         {
             var campaign = await _db.Campaigns.FindAsync(createDonationDto.CampaignId);
-            if (campaign == null) throw new Exception("Campaign not found");
-            if (!campaign.IsActive) throw new Exception("Campaign is not active");
-            if (campaign.CurrentAmount + createDonationDto.Amount > campaign.GoalAmount) throw new Exception("Donation exceeds campaign goal");
+            if (campaign == null) throw new NotFoundException("Campaign not found");
+            if (!campaign.IsActive) throw new ConflictException("Campaign is not active");
+            if (campaign.CurrentAmount + createDonationDto.Amount > campaign.GoalAmount) throw new BadRequestException("Donation exceeds campaign goal");
 
             var newDonation = new Donation
             {
@@ -52,6 +53,9 @@ namespace HumanityHub.Services
         {
             var existingDonation = await _db.Donations.FindAsync(id);
             if (existingDonation == null) return false;
+            var campaign = await _db.Campaigns.FindAsync(existingDonation.CampaignId);
+            campaign.CurrentAmount -= existingDonation.Amount;
+            if(campaign.CurrentAmount < campaign.GoalAmount) campaign.IsActive = true;
             _db.Donations.Remove(existingDonation);
             await _db.SaveChangesAsync();
             return true;

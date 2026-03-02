@@ -1,7 +1,8 @@
 
+using HumanityHub.AppExceptions;
+using HumanityHub.Services;
 using HumanityHub.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using HumanityHub.Services;
 
 namespace HumanityHub
 {
@@ -33,6 +34,9 @@ namespace HumanityHub
                               .AllowAnyMethod();
                     });
             });
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddProblemDetails();
+
             var app = builder.Build();
 
             app.UseCors("AllowFrontend");
@@ -43,6 +47,7 @@ namespace HumanityHub
                 options.SwaggerEndpoint("/openapi/v1.json", "HumanityHub API v1")
                 );
             }
+            app.UseExceptionHandler();
 
             app.UseHttpsRedirection();
 
