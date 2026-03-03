@@ -17,6 +17,7 @@ namespace HumanityHub
                 options.UseSqlite(
                     builder.Configuration.GetConnectionString("DefaultConnection")
                     ?? "Data Source=humanityhub.db"));
+
             builder.Services.AddScoped<ICampaignService, CampaignService>();
             builder.Services.AddScoped<IDonationService, DonationService>();
 

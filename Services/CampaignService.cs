@@ -19,7 +19,7 @@ namespace HumanityHub.Services
             var newCampaign = new Campaign
             {
                 Title = createDto.Title,
-                Description = createDto.Description,
+                DescriptionIssue = createDto.DescriptionIssue,
                 GoalAmount = createDto.GoalAmount <= 0 ? throw new BadRequestException("Goal amount must be greater than zero.") : createDto.GoalAmount,
             };
             _db.Campaigns.Add(newCampaign);
@@ -28,7 +28,7 @@ namespace HumanityHub.Services
             {
                 Id = newCampaign.Id,
                 Title = newCampaign.Title,
-                Description = newCampaign.Description,
+                DescriptionIssue = newCampaign.DescriptionIssue,
                 GoalAmount = newCampaign.GoalAmount,
                 CurrentAmount = newCampaign.CurrentAmount,
                 IsActive = newCampaign.IsActive,
@@ -51,7 +51,7 @@ namespace HumanityHub.Services
             {
                 Id = c.Id,
                 Title = c.Title,
-                Description = c.Description,
+                DescriptionIssue = c.DescriptionIssue,
                 GoalAmount = c.GoalAmount,
                 CurrentAmount = c.CurrentAmount,
                 IsActive = c.IsActive,
@@ -75,7 +75,7 @@ namespace HumanityHub.Services
             if (!campaign.IsActive)
                 throw new ConflictException("Cannot update inactive campaign.");
             campaign.Title = updateDto.Title;
-            campaign.Description = updateDto.Description;
+            campaign.DescriptionIssue = updateDto.DescriptionIssue;
             if (campaign.CurrentAmount > campaign.GoalAmount)
                 throw new BadRequestException("Current amount cannot exceed goal amount.");
             campaign.GoalAmount = updateDto.GoalAmount <= 0 ? throw new BadRequestException("Goal amount must be greater than zero.") : updateDto.GoalAmount;

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HumanityHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260224212549_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260303134922_UpdateModel")]
+    partial class UpdateModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,7 +32,7 @@ namespace HumanityHub.Migrations
                     b.Property<decimal>("CurrentAmount")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("DescriptionIssue")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

@@ -29,7 +29,7 @@ namespace HumanityHub.Migrations
                     b.Property<decimal>("CurrentAmount")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("DescriptionIssue")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

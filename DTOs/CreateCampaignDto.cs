@@ -4,7 +4,7 @@
     {
         public required string Title { get; set; }
 
-        public string Description { get; set; } = string.Empty;
+        public required string DescriptionIssue { get; set; }
 
         public decimal GoalAmount { get; set; }
     }
