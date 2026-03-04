@@ -1,9 +1,8 @@
-﻿using HumanityHub.Data;
+﻿
 using HumanityHub.DTOs;
-using HumanityHub.Models;
 using HumanityHub.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace HumanityHub.Controllers
 {
@@ -26,7 +25,7 @@ namespace HumanityHub.Controllers
         public async Task<IActionResult> CreateCampaign([FromBody] CreateCampaignDto createCampaignDto)
         {
                 var newCampaign = await _campaignService.CreateCampaignAsync(createCampaignDto);
-                return Ok(newCampaign);
+                return Created(string.Empty,newCampaign);
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCampaign(int id, [FromBody] CampaignUpdateDto campaignUpdateDto)

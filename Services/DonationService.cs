@@ -2,7 +2,6 @@
 using HumanityHub.DTOs;
 using HumanityHub.Services.Interfaces;
 using HumanityHub.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HumanityHub.AppExceptions;
 namespace HumanityHub.Services

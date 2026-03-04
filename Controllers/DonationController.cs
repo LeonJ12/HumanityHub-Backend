@@ -1,9 +1,8 @@
-﻿using HumanityHub.Data;
+﻿
 using HumanityHub.DTOs;
-using HumanityHub.Models;
 using HumanityHub.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
 namespace HumanityHub.Controllers
 {
     [ApiController]
@@ -31,7 +30,7 @@ namespace HumanityHub.Controllers
         public async Task<IActionResult> CreateDonation([FromBody] CreateDonationDto createDonationDto)
         {
                 var response = await _service.CreateDonationAsync(createDonationDto);
-                return Ok(response);
+                return Created(string.Empty,response);
         }
     }
 }

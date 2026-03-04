@@ -1,6 +1,4 @@
-﻿using HumanityHub.Models;
-using System.Collections;
-
+﻿
 namespace HumanityHub.DTOs
 {
     public class CampaignResponseDto

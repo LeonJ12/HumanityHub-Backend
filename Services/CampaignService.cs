@@ -3,7 +3,6 @@ using HumanityHub.Data;
 using HumanityHub.DTOs;
 using HumanityHub.Models;
 using HumanityHub.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace HumanityHub.Services
 {
