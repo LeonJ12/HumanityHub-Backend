@@ -23,7 +23,7 @@ namespace HumanityHub.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDonations(int id)
         {
-                var result = await _service.DeleteDonationAsync(id);
+                await _service.DeleteDonationAsync(id);
                 return NoContent();
         }
         [HttpPost]

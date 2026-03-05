@@ -6,6 +6,6 @@ namespace HumanityHub.Services.Interfaces
     {
             Task<IEnumerable<DonationResponseDto>> GetAllDonationsAsync();
             Task<DonationResponseDto> CreateDonationAsync(CreateDonationDto createDonationDto);
-            Task<bool> DeleteDonationAsync(int id);
+            Task DeleteDonationAsync(int id);
     }
 }

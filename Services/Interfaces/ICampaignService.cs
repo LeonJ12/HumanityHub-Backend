@@ -6,8 +6,8 @@ namespace HumanityHub.Services.Interfaces
     {
         Task<CampaignResponseDto> CreateCampaignAsync(CreateCampaignDto createDto);
         Task<IEnumerable<CampaignResponseDto>> GetAllCampaigns();
-        Task<bool> UpdateCampaignAsync(int id, CampaignUpdateDto updateDto);
+        Task UpdateCampaignAsync(int id, CampaignUpdateDto updateDto);
 
-        Task<bool> DeleteCampaignAsync(int id);
+        Task DeleteCampaignAsync(int id);
     }
 }

@@ -9,9 +9,9 @@ namespace HumanityHub.Extensions
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<Data.ApplicationDbContext>(options =>
-                options.UseSqlite(
+                options.UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection")
-                    ?? "Data Source=humanityhub.db"));
+                    ?? throw new InvalidOperationException("Connection string not found.")));
             return services;
         }
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)

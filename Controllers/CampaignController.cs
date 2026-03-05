@@ -30,13 +30,13 @@ namespace HumanityHub.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCampaign(int id, [FromBody] CampaignUpdateDto campaignUpdateDto)
         {
-                var campaign = await _campaignService.UpdateCampaignAsync(id, campaignUpdateDto);
+                await _campaignService.UpdateCampaignAsync(id, campaignUpdateDto);
                 return NoContent();
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCampaign(int id)
         {
-                var campaign = await _campaignService.DeleteCampaignAsync(id);
+                await _campaignService.DeleteCampaignAsync(id);
                 return NoContent();
         }
     }

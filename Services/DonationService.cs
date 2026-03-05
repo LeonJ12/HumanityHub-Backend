@@ -4,6 +4,7 @@ using HumanityHub.Services.Interfaces;
 using HumanityHub.Models;
 using Microsoft.EntityFrameworkCore;
 using HumanityHub.AppExceptions;
+using HumanityHub.Extensions;
 namespace HumanityHub.Services
 {
     public class DonationService : IDonationService
@@ -26,7 +27,7 @@ namespace HumanityHub.Services
                 Amount = createDonationDto.Amount,
                 DonorName = createDonationDto.DonorName,
                 DonorEmail = createDonationDto.DonorEmail,
-                PaymentMethod = "Credit Card",
+                PaymentMethod = "Credit Card", //payment logic soon
                 Status = DonationStatus.Completed
             };
 
@@ -35,44 +36,25 @@ namespace HumanityHub.Services
             if (campaign.CurrentAmount >= campaign.GoalAmount) campaign.IsActive = false;
 
             await _db.SaveChangesAsync();
-
-            var response = new DonationResponseDto
-            {
-                Id = newDonation.Id,
-                CampaignId = newDonation.CampaignId,
-                Amount = newDonation.Amount,
-                DonorName = newDonation.DonorName,
-                PaymentMethod = newDonation.PaymentMethod,
-                Status = newDonation.Status
-            };
-            return response;
+            return newDonation.ToDonationResponseDto();
         }
 
-        public async Task<bool> DeleteDonationAsync(int id)
+        public async Task DeleteDonationAsync(int id)
         {
             var existingDonation = await _db.Donations.FindAsync(id);
-            if (existingDonation == null) return false;
+            if (existingDonation == null) throw new NotFoundException($"Donation with id {id} not found.");
             var campaign = await _db.Campaigns.FindAsync(existingDonation.CampaignId);
+            if(campaign == null) throw new NotFoundException("Associated campaign not found");
             campaign.CurrentAmount -= existingDonation.Amount;
             if(campaign.CurrentAmount < campaign.GoalAmount) campaign.IsActive = true;
             _db.Donations.Remove(existingDonation);
             await _db.SaveChangesAsync();
-            return true;
         }
 
         public async Task<IEnumerable<DonationResponseDto>> GetAllDonationsAsync()
         {
             var donations = await _db.Donations.
-            Select(d => new DonationResponseDto
-            {
-                Id = d.Id,
-                CampaignId = d.CampaignId,
-                Amount = d.Amount,
-                DonorName = d.DonorName,
-                PaymentMethod = d.PaymentMethod,
-                Status = d.Status
-            }).
-        ToListAsync();
+            Select(d => d.ToDonationResponseDto()).ToListAsync();
             return donations;
         }
     }

@@ -8,7 +8,6 @@ namespace HumanityHub.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-        public DbSet<User> Users => Set<User>();
         public DbSet<Campaign> Campaigns => Set<Campaign>();
         public DbSet<Donation> Donations => Set<Donation>();
     }
