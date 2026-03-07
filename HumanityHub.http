@@ -1,6 +1,8 @@
 @HumanityHub_HostAddress = http://localhost:5103
 
 GET {{HumanityHub_HostAddress}}/api/campaign
+Content-Type: application/json
+X-Api-key : Leon12345Jerkovic*
 Accept: application/json
 
 ###
@@ -17,3 +19,24 @@ Content-Type: application/json
 ###
 GET {{HumanityHub_HostAddress}}/api/donation
 Accept: application/json
+###
+POST {{HumanityHub_HostAddress}}/api/campaign
+Content-Type: application/json
+X-Api-key : Leon12345Jerkovic*
+{
+  "title": "Brazil",
+  "descriptionissue": "Zaštita djece",
+  "GoalAmount": "203450"
+}
+###
+POST {{HumanityHub_HostAddress}}/api/payment/checkout
+Content-Type: application/json
+
+{
+    "campaignId": 2,
+    "amount": 25,
+    "donorName": "Test Donor",
+    "donorEmail": "test@test.com",
+    "successUrl": "http://localhost:3000/success",
+    "cancelUrl": "http://localhost:3000/cancel"
+}

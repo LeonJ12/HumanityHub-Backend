@@ -14,30 +14,7 @@ namespace HumanityHub.Services
         {
             _db = db;
         }
-        public async Task<DonationResponseDto> CreateDonationAsync(CreateDonationDto createDonationDto)
-        {
-            var campaign = await _db.Campaigns.FindAsync(createDonationDto.CampaignId);
-            if (campaign == null) throw new NotFoundException("Campaign not found");
-            if (!campaign.IsActive) throw new ConflictException("Campaign is not active");
-            if (campaign.CurrentAmount + createDonationDto.Amount > campaign.GoalAmount) throw new BadRequestException("Donation exceeds campaign goal");
 
-            var newDonation = new Donation
-            {
-                CampaignId = createDonationDto.CampaignId,
-                Amount = createDonationDto.Amount,
-                DonorName = createDonationDto.DonorName,
-                DonorEmail = createDonationDto.DonorEmail,
-                PaymentMethod = "Credit Card", //payment logic soon
-                Status = DonationStatus.Completed
-            };
-
-            _db.Donations.Add(newDonation);
-            campaign.CurrentAmount += newDonation.Amount;
-            if (campaign.CurrentAmount >= campaign.GoalAmount) campaign.IsActive = false;
-
-            await _db.SaveChangesAsync();
-            return newDonation.ToDonationResponseDto();
-        }
 
         public async Task DeleteDonationAsync(int id)
         {

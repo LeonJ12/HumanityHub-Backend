@@ -1,5 +1,6 @@
 ﻿
 using HumanityHub.DTOs;
+using HumanityHub.Middleware;
 using HumanityHub.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,22 +16,18 @@ namespace HumanityHub.Controllers
             this._service = service;
         }
         [HttpGet]
+        [ApiKey]
         public async Task<IActionResult> GetDonations()
         {
                 var donations = await _service.GetAllDonationsAsync();
                 return Ok(donations);
         }
         [HttpDelete("{id}")]
+        [ApiKey]
         public async Task<IActionResult> DeleteDonations(int id)
         {
                 await _service.DeleteDonationAsync(id);
                 return NoContent();
-        }
-        [HttpPost]
-        public async Task<IActionResult> CreateDonation([FromBody] CreateDonationDto createDonationDto)
-        {
-                var response = await _service.CreateDonationAsync(createDonationDto);
-                return Created(string.Empty,response);
         }
     }
 }

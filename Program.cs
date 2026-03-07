@@ -11,7 +11,7 @@ namespace HumanityHub
 
             builder.Services
                 .AddDatabase(builder.Configuration)
-                .AddApplicationServices()
+                .AddApplicationServices(builder.Configuration)
                 .AddOpenApi()
                 .AddCors(options =>
                 {
@@ -35,9 +35,17 @@ namespace HumanityHub
                 options.SwaggerEndpoint("/openapi/v1.json", "HumanityHub API v1")
                 );
             }
+            app.Use(async (context, next) =>
+            {
+                context.Request.EnableBuffering();
+                await next();
+            });
             app.UseExceptionHandler();
+            app.UseMiddleware<ApiKey>();
 
-            app.UseHttpsRedirection();
+            app.UseWhen(
+                    context => !context.Request.Path.StartsWithSegments("/api/payment/webhook"),
+                    appBuilder => appBuilder.UseHttpsRedirection());
 
             app.UseAuthorization();
 
