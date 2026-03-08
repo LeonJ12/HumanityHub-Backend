@@ -14,8 +14,7 @@ namespace HumanityHub.Extensions
                 DescriptionIssue = campaign.DescriptionIssue,
                 GoalAmount = campaign.GoalAmount,
                 CurrentAmount = campaign.CurrentAmount,
-                IsActive = campaign.IsActive,
-                Donations = campaign.Donations.Select(d => d.ToDonationResponseDto()).ToList()
+                IsActive = campaign.IsActive
             };
         }
         public static DonationResponseDto ToDonationResponseDto(this Donation donation)

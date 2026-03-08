@@ -17,7 +17,6 @@ namespace HumanityHub.Controllers
             this._campaignService = service;
         }
         [HttpGet]
-        [ApiKey]
         public async Task<IActionResult> GetCampaigns()
         {
                 var campaigns = await _campaignService.GetAllCampaigns();

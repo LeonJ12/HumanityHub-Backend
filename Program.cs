@@ -51,7 +51,6 @@ namespace HumanityHub
 
 
             app.MapControllers();
-
             app.Run();
         }
     }

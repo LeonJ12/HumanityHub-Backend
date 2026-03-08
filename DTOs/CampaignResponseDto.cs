@@ -15,6 +15,5 @@ namespace HumanityHub.DTOs
 
         public bool IsActive { get; set; } = true;
 
-        public ICollection<DonationResponseDto> Donations { get; set; } = new List<DonationResponseDto>();
     }
 }

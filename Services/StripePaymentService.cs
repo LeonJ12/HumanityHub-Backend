@@ -2,10 +2,11 @@
 using HumanityHub.Data;
 using HumanityHub.DTOs;
 using HumanityHub.Models;
+using HumanityHub.Services.Interfaces;
 using Stripe;
 using Stripe.Checkout;
 
-namespace HumanityHub.Services.Interfaces
+namespace HumanityHub.Services
 {
     public class StripePaymentService : IPaymentService
     {
