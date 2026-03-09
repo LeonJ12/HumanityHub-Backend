@@ -5,6 +5,7 @@ using HumanityHub.Models;
 using HumanityHub.Services.Interfaces;
 using Stripe;
 using Stripe.Checkout;
+using System.Globalization;
 
 namespace HumanityHub.Services
 {
@@ -69,6 +70,7 @@ namespace HumanityHub.Services
         public async Task HandleWebhookAsync(string json, string stripeSignature)
         {
                 var webhookSecret = _configuration["Stripe:WebhookSecret"];
+                if(string.IsNullOrEmpty(webhookSecret)) throw new BadRequestException("Webhook secret is not configured.");
 
                 var stripeEvent = EventUtility.ConstructEvent(
                     json,
@@ -78,17 +80,17 @@ namespace HumanityHub.Services
                 if (stripeEvent.Type == EventTypes.CheckoutSessionCompleted)
                 {
                     var session = stripeEvent.Data.Object as Session;
-                    if (session == null) return;
+                    if (session == null) throw new BadRequestException("Session is null.");
 
                     var campaignId = int.Parse(session.Metadata["campaignId"]);
-                    var amount = decimal.Parse(session.Metadata["amount"]);
+                    var amount = decimal.Parse(session.Metadata["amount"], CultureInfo.InvariantCulture);
                     var donorName = session.Metadata["donorName"];
                     var donorEmail = session.Metadata["donorEmail"];
 
                     var campaign = await _db.Campaigns.FindAsync(campaignId);
-                    if (campaign == null) return;
+                    if (campaign == null) throw new NotFoundException($"Campaign with id {campaignId} not found.");
 
-                    var donation = new Donation
+                var donation = new Donation
                     {
                         CampaignId = campaignId,
                         Amount = amount,
