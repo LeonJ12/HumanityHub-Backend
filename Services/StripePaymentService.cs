@@ -68,42 +68,50 @@ namespace HumanityHub.Services
 
         public async Task HandleWebhookAsync(string json, string stripeSignature)
         {
-            var webhookSecret = _configuration["Stripe:WebhookSecret"];
-
-            var stripeEvent = EventUtility.ConstructEvent(
-                json,
-                stripeSignature,
-                webhookSecret
-            );
-            if (stripeEvent.Type == EventTypes.CheckoutSessionCompleted)
+            try
             {
-                var session = stripeEvent.Data.Object as Session;
-                if (session == null) return;
+                var webhookSecret = _configuration["Stripe:WebhookSecret"];
 
-                var campaignId = int.Parse(session.Metadata["campaignId"]);
-                var amount = decimal.Parse(session.Metadata["amount"]);
-                var donorName = session.Metadata["donorName"];
-                var donorEmail = session.Metadata["donorEmail"];
-
-                var campaign = await _db.Campaigns.FindAsync(campaignId);
-                if (campaign == null) return;
-
-                var donation = new Donation
+                var stripeEvent = EventUtility.ConstructEvent(
+                    json,
+                    stripeSignature,
+                    webhookSecret
+                );
+                if (stripeEvent.Type == EventTypes.CheckoutSessionCompleted)
                 {
-                    CampaignId = campaignId,
-                    Amount = amount,
-                    DonorName = donorName,
-                    DonorEmail = donorEmail,
-                    PaymentMethod = "Credit Card",
-                    Status = DonationStatus.Completed
-                };
+                    var session = stripeEvent.Data.Object as Session;
+                    if (session == null) return;
 
-                _db.Donations.Add(donation);
-                campaign.CurrentAmount += amount;
-                if (campaign.CurrentAmount >= campaign.GoalAmount)
-                    campaign.IsActive = false;
+                    var campaignId = int.Parse(session.Metadata["campaignId"]);
+                    var amount = decimal.Parse(session.Metadata["amount"]);
+                    var donorName = session.Metadata["donorName"];
+                    var donorEmail = session.Metadata["donorEmail"];
 
-                await _db.SaveChangesAsync();
+                    var campaign = await _db.Campaigns.FindAsync(campaignId);
+                    if (campaign == null) return;
+
+                    var donation = new Donation
+                    {
+                        CampaignId = campaignId,
+                        Amount = amount,
+                        DonorName = donorName,
+                        DonorEmail = donorEmail,
+                        PaymentMethod = "Credit Card",
+                        Status = DonationStatus.Completed
+                    };
+
+                    _db.Donations.Add(donation);
+                    campaign.CurrentAmount += amount;
+                    if (campaign.CurrentAmount >= campaign.GoalAmount)
+                        campaign.IsActive = false;
+
+                    await _db.SaveChangesAsync();
+                }
+            }
+            catch (StripeException ex)
+            {
+
+                throw new BadRequestException("Stripe webhook error: " + ex.Message);
             }
         }
     }
