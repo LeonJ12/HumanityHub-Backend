@@ -26,6 +26,12 @@ namespace HumanityHub
 
             var app = builder.Build();
 
+            app.Use(async (context, next) =>
+            {
+                context.Request.EnableBuffering();
+                await next();
+            });
+
             app.UseCors("AllowFrontend");
 
             if (app.Environment.IsDevelopment())
@@ -35,11 +41,6 @@ namespace HumanityHub
                 options.SwaggerEndpoint("/openapi/v1.json", "HumanityHub API v1")
                 );
             }
-            app.Use(async (context, next) =>
-            {
-                context.Request.EnableBuffering();
-                await next();
-            });
             app.UseExceptionHandler();
             app.UseMiddleware<ApiKey>();
 
