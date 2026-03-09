@@ -32,7 +32,7 @@ namespace HumanityHub.Middleware
             else
             {
                 statusCode = StatusCodes.Status500InternalServerError;
-                message = "An unexpected error occurred.";
+                message = exception.Message;
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             }
 
