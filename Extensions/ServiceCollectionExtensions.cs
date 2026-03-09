@@ -12,13 +12,7 @@ namespace HumanityHub.Extensions
             services.AddDbContext<Data.ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection")
-                    ?? throw new InvalidOperationException("Connection string not found."), o =>
-                    {
-                        o.EnableRetryOnFailure(
-                            maxRetryCount: 5,
-                            maxRetryDelay: TimeSpan.FromSeconds(10),
-                            errorCodesToAdd: null);
-                    }));
+                    ?? throw new InvalidOperationException("Connection string not found.")));
             return services;
         }
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
