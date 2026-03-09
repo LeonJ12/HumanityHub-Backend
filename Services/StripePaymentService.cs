@@ -68,8 +68,6 @@ namespace HumanityHub.Services
 
         public async Task HandleWebhookAsync(string json, string stripeSignature)
         {
-            try
-            {
                 var webhookSecret = _configuration["Stripe:WebhookSecret"];
 
                 var stripeEvent = EventUtility.ConstructEvent(
@@ -108,11 +106,5 @@ namespace HumanityHub.Services
                     await _db.SaveChangesAsync();
                 }
             }
-            catch (StripeException ex)
-            {
-
-                throw new BadRequestException("Stripe webhook error: " + ex.Message);
-            }
         }
     }
-}
