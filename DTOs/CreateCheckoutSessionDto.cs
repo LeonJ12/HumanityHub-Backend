@@ -13,7 +13,9 @@ namespace HumanityHub.DTOs
         public string DonorName { get; set; } = string.Empty;
         [EmailAddress(ErrorMessage = "Invalid email address format.")]
         public string DonorEmail { get; set; } = string.Empty;
+        [Url(ErrorMessage = "Invalid URL format.")]
         public string SuccessUrl { get; set; } = string.Empty;
+        [Url(ErrorMessage = "Invalid URL format.")]
         public string CancelUrl { get; set; } = string.Empty;
     }
 }

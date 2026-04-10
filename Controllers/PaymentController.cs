@@ -1,6 +1,7 @@
 ﻿using HumanityHub.DTOs;
 using HumanityHub.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace HumanityHub.Controllers
 {
@@ -14,6 +15,7 @@ namespace HumanityHub.Controllers
             _paymentService = paymentService;
         }
         [HttpPost("checkout")]
+        [EnableRateLimiting("User")]
         public async Task<IActionResult> CreateCheckoutSession([FromBody] CreateCheckoutSessionDto dto)
         {
             var sessionUrl = await _paymentService.CreateCheckoutSessionAsync(dto);

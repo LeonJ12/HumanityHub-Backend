@@ -3,6 +3,7 @@ using HumanityHub.DTOs;
 using HumanityHub.Middleware;
 using HumanityHub.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace HumanityHub.Controllers
 {
@@ -17,6 +18,7 @@ namespace HumanityHub.Controllers
         }
         [HttpGet]
         [ApiKey]
+        [EnableRateLimiting("Admin")]
         public async Task<IActionResult> GetDonations()
         {
                 var donations = await _service.GetAllDonationsAsync();
@@ -24,6 +26,7 @@ namespace HumanityHub.Controllers
         }
         [HttpDelete("{id}")]
         [ApiKey]
+        [EnableRateLimiting("Admin")]
         public async Task<IActionResult> DeleteDonations(int id)
         {
                 await _service.DeleteDonationAsync(id);

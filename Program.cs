@@ -13,6 +13,7 @@ namespace HumanityHub
                 .AddDatabase(builder.Configuration)
                 .AddApplicationServices(builder.Configuration)
                 .AddOpenApi()
+                .AddRateLimitingPolicies()
                 .AddCors(options =>
                 {
                     options.AddPolicy("AllowFrontend", policy =>
@@ -43,6 +44,7 @@ namespace HumanityHub
             }
             app.UseExceptionHandler();
             app.UseMiddleware<ApiKey>();
+            app.UseRateLimiter();
 
             app.UseWhen(
                     context => !context.Request.Path.StartsWithSegments("/api/payment/webhook"),

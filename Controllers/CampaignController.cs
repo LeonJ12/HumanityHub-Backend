@@ -3,6 +3,7 @@ using HumanityHub.DTOs;
 using HumanityHub.Middleware;
 using HumanityHub.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 
 namespace HumanityHub.Controllers
@@ -17,6 +18,7 @@ namespace HumanityHub.Controllers
             this._campaignService = service;
         }
         [HttpGet]
+        [EnableRateLimiting("User")]
         public async Task<IActionResult> GetCampaigns()
         {
                 var campaigns = await _campaignService.GetAllCampaigns();
@@ -24,6 +26,7 @@ namespace HumanityHub.Controllers
         }
         [HttpPost]
         [ApiKey]
+        [EnableRateLimiting("Admin")]
         public async Task<IActionResult> CreateCampaign([FromBody] CreateCampaignDto createCampaignDto)
         {
                 var newCampaign = await _campaignService.CreateCampaignAsync(createCampaignDto);
@@ -31,6 +34,7 @@ namespace HumanityHub.Controllers
         }
         [HttpPut("{id}")]
         [ApiKey]
+        [EnableRateLimiting("Admin")]
         public async Task<IActionResult> UpdateCampaign(int id, [FromBody] CampaignUpdateDto campaignUpdateDto)
         {
                 await _campaignService.UpdateCampaignAsync(id, campaignUpdateDto);
@@ -38,6 +42,7 @@ namespace HumanityHub.Controllers
         }
         [HttpDelete("{id}")]
         [ApiKey]
+        [EnableRateLimiting("Admin")]
         public async Task<IActionResult> DeleteCampaign(int id)
         {
                 await _campaignService.DeleteCampaignAsync(id);
